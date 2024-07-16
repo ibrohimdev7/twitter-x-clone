@@ -16,6 +16,7 @@ import {
 import { Input } from "../ui/input";
 import Button from "../ui/button";
 import { useLoginModalStore } from "@/hooks/use-login-modal";
+import axios from "axios";
 
 const RegisterStepOne = ({
   setData,
@@ -32,9 +33,16 @@ const RegisterStepOne = ({
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerStepOneSchema>) => {
-    setData({ ...values });
-    setStep(2);
+  const onSubmit = async (values: z.infer<typeof registerStepOneSchema>) => {
+    try {
+      const { data } = await axios.post("/api/auth/register?step=1", values);
+      if (data?.success) {
+        setData({ ...values });
+        setStep(2);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const { isSubmitting } = form.formState;
