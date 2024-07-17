@@ -3,12 +3,12 @@
 import React, { useCallback } from "react";
 
 import Image from "next/image";
+import { useLoginModalStore } from "@/hooks/use-login-modal";
 import Button from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from "react-icons/ai";
 import { useRegisterModalStore } from "@/hooks/use-register-modal";
 import RegisterModal from "../modals/register-modal";
-import { useLoginModalStore } from "@/hooks/use-login-modal";
 import LoginModal from "../modals/login-modal";
 
 const Auth = () => {

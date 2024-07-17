@@ -17,10 +17,14 @@ import {
 import { Input } from "../ui/input";
 import Button from "../ui/button";
 import { useRegisterModalStore } from "@/hooks/use-register-modal";
+import axios from "axios";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const LoginModal = () => {
   const useLoginStore = useLoginModalStore();
   const registerModal = useRegisterModalStore();
+  const [error, setError] = React.useState("");
 
   const onToggleRegisterModal = useCallback(() => {
     useLoginStore.onClose();
@@ -37,12 +41,30 @@ const LoginModal = () => {
 
   const { isSubmitting } = form.formState;
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      const { data } = await axios.post("/api/auth/login", values);
+      if (data?.success) {
+        useLoginStore.onClose();
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
   };
 
   const bodyContent = (
     <Form {...form}>
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-12">
         <FormField
           control={form.control}
