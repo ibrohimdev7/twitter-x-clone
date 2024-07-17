@@ -17,6 +17,8 @@ import { Input } from "../ui/input";
 import Button from "../ui/button";
 import { useLoginModalStore } from "@/hooks/use-login-modal";
 import axios from "axios";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const RegisterStepOne = ({
   setData,
@@ -25,6 +27,8 @@ const RegisterStepOne = ({
   setData: (data: { name: string; email: string }) => void;
   setStep: (step: number) => void;
 }) => {
+  const [error, setError] = React.useState("");
+
   const form = useForm<z.infer<typeof registerStepOneSchema>>({
     resolver: zodResolver(registerStepOneSchema),
     defaultValues: {
@@ -40,8 +44,12 @@ const RegisterStepOne = ({
         setData({ ...values });
         setStep(2);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
     }
   };
 
@@ -49,6 +57,13 @@ const RegisterStepOne = ({
 
   return (
     <Form {...form}>
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-12">
         <h3 className="text-3xl font-semibold text-white">Create an account</h3>
         <FormField
@@ -88,7 +103,14 @@ const RegisterStepOne = ({
   );
 };
 
-const RegisterStepTwo = () => {
+const RegisterStepTwo = ({
+  data,
+}: {
+  data: { name: string; email: string };
+}) => {
+  const [error, setError] = React.useState("");
+  const registerModal = useRegisterModalStore();
+
   const form = useForm<z.infer<typeof registerStepTwoSchema>>({
     resolver: zodResolver(registerStepTwoSchema),
     defaultValues: {
@@ -97,14 +119,35 @@ const RegisterStepTwo = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerStepTwoSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof registerStepTwoSchema>) => {
+    try {
+      const { data: response } = await axios.post("/api/auth/register?step=2", {
+        ...data,
+        ...values,
+      });
+      if (response?.success) {
+        registerModal.onClose();
+      }
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    }
   };
 
   const { isSubmitting } = form.formState;
 
   return (
     <Form {...form}>
+      {error && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-12">
         <FormField
           control={form.control}
@@ -162,7 +205,7 @@ const RegisterModal = () => {
     step === 1 ? (
       <RegisterStepOne setData={setData} setStep={setStep} />
     ) : (
-      <RegisterStepTwo />
+      <RegisterStepTwo data={data} />
     );
 
   const footer = (
