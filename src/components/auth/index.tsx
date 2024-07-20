@@ -10,10 +10,13 @@ import { AiFillGithub } from "react-icons/ai";
 import { useRegisterModalStore } from "@/hooks/use-register-modal";
 import RegisterModal from "../modals/register-modal";
 import LoginModal from "../modals/login-modal";
+import { signIn, useSession } from "next-auth/react";
 
 const Auth = () => {
   const registerModal = useRegisterModalStore();
   const loginModal = useLoginModalStore();
+
+  const { data } = useSession();
 
   const onOpenRegisterModal = useCallback(() => {
     registerModal.onOpen();
@@ -52,6 +55,7 @@ const Auth = () => {
             <h2 className="font-bold text-3xl mb-4">Join. today</h2>
             <div className="flex flex-col space-y-2">
               <Button
+                onClick={() => signIn("google")}
                 label={
                   <div className="flex gap-2 items-center justify-center">
                     <FcGoogle />
@@ -68,6 +72,7 @@ const Auth = () => {
                     Sign Up with GitHub
                   </div>
                 }
+                onClick={() => signIn("github")}
                 fullWidth
                 secondary
               />

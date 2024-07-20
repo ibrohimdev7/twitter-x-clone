@@ -19,6 +19,7 @@ import { useLoginModalStore } from "@/hooks/use-login-modal";
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 const RegisterStepOne = ({
   setData,
@@ -126,6 +127,10 @@ const RegisterStepTwo = ({
         ...values,
       });
       if (response?.success) {
+        signIn("credentials", {
+          email: data.email,
+          password: values.password,
+        });
         registerModal.onClose();
       }
     } catch (error: any) {
