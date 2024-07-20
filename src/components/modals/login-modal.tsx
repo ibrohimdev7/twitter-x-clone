@@ -20,6 +20,7 @@ import { useRegisterModalStore } from "@/hooks/use-register-modal";
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 const LoginModal = () => {
   const useLoginStore = useLoginModalStore();
@@ -45,6 +46,7 @@ const LoginModal = () => {
     try {
       const { data } = await axios.post("/api/auth/login", values);
       if (data?.success) {
+        signIn("credentials", values);
         useLoginStore.onClose();
       }
     } catch (error: any) {
