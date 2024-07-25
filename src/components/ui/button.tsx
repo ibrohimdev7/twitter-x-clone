@@ -10,6 +10,7 @@ interface ButtonProps {
   outline?: boolean;
   type?: "button" | "submit";
   onClick?: () => void;
+  className?: string;
 }
 
 const Button = ({
@@ -21,6 +22,7 @@ const Button = ({
   outline,
   type,
   onClick,
+  className,
 }: ButtonProps) => {
   return (
     <button
@@ -31,7 +33,8 @@ const Button = ({
         large ? "text-xl py-3 px-5" : "text-md py-3 px-4",
         outline
           ? "bg-transparent border-slate-600 text-sky-500 hover:bg-slate-800/40"
-          : ""
+          : "",
+        className
       )}
       type={type}
       disabled={disabled}

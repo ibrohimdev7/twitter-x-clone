@@ -1,6 +1,6 @@
 import { AuthOptions } from "next-auth";
 import connectToDatabase from "./mongoose";
-import User from "../../database/user.model";
+import User from "@/database/user.model";
 
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
@@ -38,10 +38,10 @@ export const authOptions: AuthOptions = {
       const isExistingUser = await User.findOne({ email: session.user.email });
 
       if (!isExistingUser) {
-        const newUser = new User({
+        const newUser = await User.create({
           name: session.user.name,
           email: session.user.email,
-          profileImage: session.user.profileImage,
+          profileImage: session.user.image,
         });
 
         session.currentUser = newUser;
@@ -52,7 +52,6 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  debug: process.env.NODE_ENV === "development",
   session: { strategy: "jwt" },
   jwt: { secret: process.env.NEXTAUTH_JWT_SECRET },
   secret: process.env.NEXTAUTH_SECRET,

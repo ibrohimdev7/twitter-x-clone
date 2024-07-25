@@ -17,18 +17,15 @@ const Sidebar = ({ user }: { user: IUser }) => {
     },
     {
       name: "Notifications",
-      href: `/notifications/${user._id}`,
+      href: `/notifications/${user?._id}`,
       icon: Bell,
     },
     {
       name: "Profile",
-      href: `/profile/${user._id}`,
+      href: `/profile/${user?._id}`,
       icon: User,
     },
   ];
-
-  console.log(user);
-  
 
   return (
     <section className="sticky left-0 top-0 h-screen lg:w-[266px] w-fit flex flex-col justify-between py-4 pl-2">
