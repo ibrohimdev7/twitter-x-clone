@@ -6,6 +6,7 @@ import { IUser } from "@/types";
 import { Popover, PopoverTrigger } from "../ui/popover";
 import { MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { sliceText } from "@/lib/utils";
 
 interface SidebarAccountProps {
   user: IUser;
@@ -30,13 +31,15 @@ const SidebarAccount = ({ user }: SidebarAccountProps) => {
           <div className="flex justify-between items-center gap-2">
             <div className="flex gap-2 items-center">
               <Avatar>
-                <AvatarImage src={user?.profileImage} alt={user.username} />
-                <AvatarFallback>{user.name?.[0]}</AvatarFallback>
+                <AvatarImage src={user?.profileImage} alt={user?.username} />
+                <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start text-white">
-                <p>{user.name}</p>
-                {user.username ? (
-                  <p className="opacity-40"> {user.username} </p>
+                <p title={user?.name} className="text-start">
+                  {sliceText(user?.name, 15)}
+                </p>
+                {user?.username ? (
+                  <p className="opacity-40"> {user?.username} </p>
                 ) : (
                   <p className="opacity-40">Manage account</p>
                 )}

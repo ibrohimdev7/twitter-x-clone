@@ -9,7 +9,7 @@ import Sidebar from "@/components/sidebar/sidebar";
 import FollowBar from "@/components/shared/follow-bar";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await getServerSession(authOptions);
+  const session: any = await getServerSession(authOptions);
 
   if (!session) {
     return (
@@ -22,7 +22,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="lg:container h-screen mx-auto lg:max-w-7xl">
       <div className="flex">
-        <Sidebar user={JSON.parse(JSON.stringify(session?.user))} />
+        <Sidebar user={JSON.parse(JSON.stringify(session?.currentUser))} />
         <div className="flex flex-1 border-x-[1px] border-neutral-800 lg:mx-4 ml-1">
           <NextTopLoader
             color="#2299DD"

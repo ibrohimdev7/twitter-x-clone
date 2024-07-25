@@ -1,6 +1,6 @@
 import connectToDatabase from "@/lib/mongoose";
 import { NextResponse } from "next/server";
-import User from "../../../../../database/user.model";
+import User from "@/database/user.model";
 
 import { hash } from "bcrypt";
 

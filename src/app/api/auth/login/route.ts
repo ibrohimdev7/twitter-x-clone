@@ -1,8 +1,8 @@
 import connectToDatabase from "@/lib/mongoose";
 import { NextResponse } from "next/server";
+import User from "@/database/user.model";
 
 import { compare } from "bcrypt";
-import User from "../../../../../database/user.model";
 
 export async function POST(req: Request) {
   try {
