@@ -1,6 +1,8 @@
 import Post from "@/database/post.model";
 import User from "@/database/user.model";
+import { authOptions } from "@/lib/auth-options";
 import connectToDatabase from "@/lib/mongoose";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -26,6 +28,8 @@ export async function GET(request: Request) {
   try {
     await connectToDatabase();
 
+    const { currentUser }: any = await getServerSession(authOptions);
+
     const { searchParams } = new URL(request.url);
     const limit = searchParams.get("limit");
 
@@ -37,7 +41,23 @@ export async function GET(request: Request) {
       })
       .limit(Number(limit));
 
-    return NextResponse.json(posts);
+    const filteredPosts = posts.map((post) => ({
+     body: post?.body,
+     createdAt: post?.createdAt,
+     comments: post?.comments?.length,
+     user: {
+      _id: post?.user?._id,
+      name: post?.user?.name,
+      email: post?.user?.email,
+      profileImage: post?.user?.profileImage,
+      username: post?.user?.username,
+     },
+     likes: post?.likes?.length,
+     hasLiked: post?.likes?.includes(currentUser?._id),
+     _id: post?._id,
+    }));
+
+    return NextResponse.json(filteredPosts);
   } catch (error) {
     const res = error as Error;
 
