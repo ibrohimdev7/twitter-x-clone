@@ -6,6 +6,7 @@ import ProfileHero from "@/components/profile/profile-hero";
 import ProfileBio from "@/components/profile/profile-bio";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
+import PostFeed from "@/components/profile/post-feed";
 
 const Page = async ({ params }: { params: { userId: string } }) => {
   const session: any = await getServerSession(authOptions);
@@ -19,6 +20,7 @@ const Page = async ({ params }: { params: { userId: string } }) => {
         user={JSON.parse(JSON.stringify(user))}
         userId={JSON.parse(JSON.stringify(session))?.currentUser?._id}
       />
+      <PostFeed userId={params?.userId} user={JSON.parse(JSON.stringify(session?.currentUser))} />
     </>
   );
 };

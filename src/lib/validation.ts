@@ -14,3 +14,10 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
+
+export const updateUserSchema = z.object({
+  name: z.string().min(2).max(50),
+  username: z.string().min(3),
+  bio: z.string().min(10),
+  location: z.string().min(2),
+});

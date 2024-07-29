@@ -7,6 +7,7 @@ import { Popover, PopoverTrigger } from "../ui/popover";
 import { MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { sliceText } from "@/lib/utils";
+import { removeSpaces } from "@/lib/remove-spaces";
 
 interface SidebarAccountProps {
   user: IUser;
@@ -39,7 +40,10 @@ const SidebarAccount = ({ user }: SidebarAccountProps) => {
                   {sliceText(user?.name, 15)}
                 </p>
                 {user?.username ? (
-                  <p className="opacity-40"> {user?.username} </p>
+                  <p className="opacity-40">
+                    {" "}
+                    @{removeSpaces(user?.username)}{" "}
+                  </p>
                 ) : (
                   <p className="opacity-40">Manage account</p>
                 )}
