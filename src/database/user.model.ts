@@ -8,6 +8,21 @@ const UserSchema = new mongoose.Schema(
     username: String,
     coverImage: String,
     profileImage: String,
+    bio: String,
+    location: String,
+    createdAt: Date,
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

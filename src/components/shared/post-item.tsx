@@ -12,6 +12,7 @@ import axios from "axios";
 import { toast } from "../ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { removeSpaces } from "@/lib/remove-spaces";
 
 interface Props {
   post: IPost;
@@ -137,7 +138,12 @@ const PostItem = ({ post, user, setPosts }: Props) => {
               {post.user?.name}
             </p>
             <span className="text-neutral-500 cursor-pointer hover:underline hidden sm:block">
-              {sliceText(post.user?.username || post.user?.email, 16)}
+              {sliceText(
+                post.user?.username
+                  ? `@${removeSpaces(post.user?.username)}`
+                  : post.user?.email,
+                16
+              )}
             </span>
             <span className="text-neutral-500 text-sm">
               {formatDistanceToNowStrict(new Date(post.createdAt))} ago
