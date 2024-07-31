@@ -7,6 +7,7 @@ import SidebarItem from "./sidebar-item";
 import SidebarPostButton from "./sidebar-post-button";
 import SidebarAccount from "./sidebar-account";
 import { IUser } from "@/types";
+import { MdOutlineExplore } from "react-icons/md";
 
 const Sidebar = ({ user }: { user: IUser }) => {
   const sidebarItems = [
@@ -26,6 +27,11 @@ const Sidebar = ({ user }: { user: IUser }) => {
       href: `/profile/${user?._id}`,
       icon: User,
     },
+    {
+      name: "Explore",
+      href: `/explore`,
+      icon: MdOutlineExplore,
+    },
   ];
 
   return (
@@ -43,7 +49,7 @@ const Sidebar = ({ user }: { user: IUser }) => {
 
         {sidebarItems.map((item) => (
           <Link key={item.href} href={item.href}>
-            <SidebarItem item={item} />
+            <SidebarItem {...item} />
           </Link>
         ))}
 

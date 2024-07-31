@@ -4,16 +4,12 @@ import { BsDot } from "react-icons/bs";
 import { LucideIcon } from "lucide-react";
 
 interface SidebarItemProps {
-  item: {
-    name: string;
-    icon: LucideIcon;
-    hasNewNotification?: boolean;
-  };
+  name: string;
+  icon: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
+  hasNewNotification?: boolean; 
 }
 
-const SidebarItem = ({
-  item: { name, icon: Icon, hasNewNotification },
-}: SidebarItemProps) => {
+const SidebarItem = ({ name, icon: Icon, hasNewNotification }: SidebarItemProps) => {
   return (
     <div className="flex flex-row items-center">
       {/* MOBILE SIDEBAR ITEM */}
