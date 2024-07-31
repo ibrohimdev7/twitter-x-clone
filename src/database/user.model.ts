@@ -23,6 +23,13 @@ const UserSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    hasNewNotifications: Boolean,
+    notifications: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification",
+      },
+    ],
   },
   {
     timestamps: true,

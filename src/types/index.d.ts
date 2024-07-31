@@ -14,6 +14,8 @@ export interface IUser {
   hasNewNotifications: boolean;
   notifications: string[];
   isFollowing: boolean;
+  hasNewNotifications: boolean;
+  notifications: string[];
 }
 
 export interface IPost {

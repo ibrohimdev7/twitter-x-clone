@@ -1,22 +1,33 @@
-import React from "react";
-import { signOut } from "next-auth/react";
+"use client";
 
-import { RiLogoutCircleLine } from "react-icons/ri";
+import React from "react";
+
 import { IUser } from "@/types";
-import { Popover, PopoverTrigger } from "../ui/popover";
-import { MoreHorizontal } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Loader2, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { sliceText } from "@/lib/utils";
 import { removeSpaces } from "@/lib/remove-spaces";
 
-interface SidebarAccountProps {
+interface Props {
   user: IUser;
 }
 
-const SidebarAccount = ({ user }: SidebarAccountProps) => {
+const SidebarAccount = ({ user }: Props) => {
+  const { data, status }: any = useSession();
+
+  if (status == "loading")
+    return (
+      <div className="flex items-center justify-center">
+        <Loader2 className="animate-spin text-sky-500" />
+      </div>
+    );
+
   return (
-    <div>
-      {/* MOBIlE SIDEBAR ACCOUNT */}
+    <>
+      {/* MOBIE SIDEBAR ACCOUNT */}
       <div className="lg:hidden block">
         <div
           className="mt-6 lg:hidden rounded-full h-14 w-14 p-4 flex items-center justify-center bg-red-500 hover:bg-opacity-80 transition cursor-pointer"
@@ -32,12 +43,12 @@ const SidebarAccount = ({ user }: SidebarAccountProps) => {
           <div className="flex justify-between items-center gap-2">
             <div className="flex gap-2 items-center">
               <Avatar>
-                <AvatarImage src={user?.profileImage} alt={user?.username} />
-                <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+                <AvatarImage src={data?.currentUser?.profileImage} />
+                <AvatarFallback>{data?.currentUser?.name[0]}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start text-white">
-                <p title={user?.name} className="text-start">
-                  {sliceText(user?.name, 15)}
+                <p title={user?.name || ""} className="text-start">
+                  {sliceText(user?.name || "Guest", 15)}
                 </p>
                 {user?.username ? (
                   <p className="opacity-40">
@@ -52,8 +63,19 @@ const SidebarAccount = ({ user }: SidebarAccountProps) => {
             <MoreHorizontal size={24} color="white" />
           </div>
         </PopoverTrigger>
+        <PopoverContent className="bg-black border-none rounded-2xl shadow shadow-white px-0 mb-3">
+          <div
+            className="font-bold text-white cursor-pointer hover:bg-slate-300 hover:bg-opacity-10 p-4 transition"
+            onClick={() => signOut()}
+          >
+            Log out{" "}
+            {data?.currentUser?.username
+              ? `@${data?.currentUser?.username}`
+              : data?.currentUser?.name}
+          </div>
+        </PopoverContent>
       </Popover>
-    </div>
+    </>
   );
 };
 

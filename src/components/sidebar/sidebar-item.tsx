@@ -1,14 +1,15 @@
-import { LucideIcon } from "lucide-react";
 import React from "react";
 
+import { BsDot } from "react-icons/bs";
+import { LucideIcon } from "lucide-react";
+
 interface SidebarItemProps {
-  item: {
-    name: string;
-    icon: LucideIcon;
-  };
+  name: string;
+  icon: LucideIcon | React.FC<React.SVGProps<SVGSVGElement>>;
+  hasNewNotification?: boolean; 
 }
 
-const SidebarItem = ({ item: { name, icon: Icon } }: SidebarItemProps) => {
+const SidebarItem = ({ name, icon: Icon, hasNewNotification }: SidebarItemProps) => {
   return (
     <div className="flex flex-row items-center">
       {/* MOBILE SIDEBAR ITEM */}
@@ -20,6 +21,9 @@ const SidebarItem = ({ item: { name, icon: Icon } }: SidebarItemProps) => {
       <div className="relative hidden gap-4 p-4 rounded-full hover:bg-slate-300 hover:bg-opacity-10 cursor-pointer items-center lg:flex">
         <Icon size={24} color="white" />
         <span className="text-xl text-white">{name}</span>
+        {hasNewNotification && (
+          <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} />
+        )}
       </div>
     </div>
   );
