@@ -9,6 +9,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { toast } from "../ui/use-toast";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const CommentItem = ({
   comment,
@@ -20,6 +21,8 @@ const CommentItem = ({
   setComments: React.Dispatch<React.SetStateAction<IPost[]>>;
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const router = useRouter();
 
   const onLike = async () => {
     try {
@@ -102,6 +105,11 @@ const CommentItem = ({
     }
   };
 
+  const goToProfile = (evt: React.MouseEvent<HTMLDivElement>) => {
+    evt.stopPropagation();
+    router.push(`/profile/${user?._id}`);
+  };
+
   return (
     <div
       key={comment._id}
@@ -116,13 +124,16 @@ const CommentItem = ({
       )}
 
       <div className="flex flex-row items-center gap-3">
-        <Avatar>
+        <Avatar onClick={goToProfile}>
           <AvatarImage src={comment?.user?.profileImage} />
           <AvatarFallback>{comment?.user?.name[0]}</AvatarFallback>
         </Avatar>
 
         <div>
-          <div className="flex flex-row items-center gap-2">
+          <div
+            className="flex flex-row items-center gap-2"
+            onClick={goToProfile}
+          >
             <p className="text-white font-semibold cursor-pointer hover:underline">
               {comment?.user?.name}
             </p>

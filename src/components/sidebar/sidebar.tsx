@@ -19,6 +19,7 @@ const Sidebar = ({ user }: { user: IUser }) => {
       name: "Notifications",
       href: `/notifications/${user?._id}`,
       icon: Bell,
+      hasNewNotification: user?.hasNewNotifications,
     },
     {
       name: "Profile",
